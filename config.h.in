@@ -1,0 +1,2 @@
+#define CKKSBenchmark_VERSION_MAJOR @CKKSBenchmark_VERSION_MAJOR@
+#define CKKSBenchmark_VERSION_MINOR @CKKSBenchmark_VERSION_MINOR@
