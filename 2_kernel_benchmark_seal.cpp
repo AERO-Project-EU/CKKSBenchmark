@@ -748,8 +748,12 @@ void ckks_kernel_benchmark_seal(){
 		 * csv file output
 		 */
 		if(csv_output){
+			time_t t = time(0);
+			char datetime[16];
+			strftime(datetime,16,"%Y%m%d-%H%M%S", localtime(&t));
+			string s_datetime = datetime;
 			ofstream stats_file;
-			string fname = "./output/1_kernel_bench_" +
+			string fname = "./output/" + s_datetime + "_2_kernel_bench_seal_" +
 								to_string(curr_bench.enc_mode) + "_" +
 								to_string((int)curr_bench.sec_level) + "_" +
 								to_string(curr_bench.poly_modulus_degree) + "_" +
@@ -758,11 +762,6 @@ void ckks_kernel_benchmark_seal(){
 			stats_file.open(fname, ios::out);
 
 			//header
-//			string header = to_string((int)curr_bench.enc_mode) + ", " +
-//							to_string((int)curr_bench.sec_level) + ", " +
-//							to_string((int)curr_bench.poly_modulus_degree) + ", " +
-//							to_string((int)curr_bench.modulus_bit_sizes.size());
-//			stats_file << header << endl << endl;
 			string unit = BENCH_UNIT==0?"us":"cycles";
 			stats_file << benchmark_return_to_string(*curr_bench_outcome) << "," << unit << endl << endl;
 
