@@ -1,4 +1,4 @@
-uild buildINSTALLING SEAL library locally (from SEAL-main folder)
+INSTALLING SEAL library locally (from SEAL-main folder)
 
 cmake -S . -B build -DCMAKE_INSTALL_PREFIX=<path/to/local/install>
 
