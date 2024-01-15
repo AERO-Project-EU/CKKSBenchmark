@@ -92,7 +92,7 @@ inline T min_val(vector<T> vec){
 
 /*
  * function to calculate the average value of the vector elements
- * greater than low and lower than up bounds
+ * greater than low and lower than up bounds (inclusive)
  */
 template <typename T>
 inline double average(
@@ -103,7 +103,7 @@ inline double average(
 	double acc = 0.0;
 	int cnt = 0;
 	for(int i=0;i<vec.size();i++){
-		if((double)vec[i]>low && (double)vec[i]<up){
+		if((double)vec[i]>=low && (double)vec[i]<=up){
 			acc += (double)vec[i];
 			cnt++;
 		}
@@ -133,7 +133,7 @@ inline double average(
 
 /*
  * function to calculate the standard deviation value of the vector elements
- * greater than low and lower that up bounds
+ * greater than low and lower that up bounds (inclusive)
  */
 template <typename T>
 inline double std_deviation(
@@ -145,7 +145,7 @@ inline double std_deviation(
 	double avg = average(vec);
 	int cnt = 0;
 	for(int i=0; i<vec.size();i++){
-		if((double)vec[i]>low && (double)vec[i]<up){
+		if((double)vec[i]>=low && (double)vec[i]<=up){
 			s_dev += pow(vec[i] - avg, 2);
 			cnt++;
 		}
@@ -156,7 +156,7 @@ inline double std_deviation(
 
 /*
  * function to count the elements within a vector
- * greater than low and lower than up bounds
+ * greater than low and lower than up bounds (inclusive)
  */
 template <typename T>
 inline int count_value(
@@ -165,7 +165,7 @@ inline int count_value(
 				double up = std::numeric_limits<double>::max()) {
 	int cnt = 0;
 	for(int i=0;i<vec.size();i++){
-		if(vec[i]>low && vec[i]<up){
+		if(vec[i]>=low && vec[i]<=up){
 			cnt++;
 		}
 	}

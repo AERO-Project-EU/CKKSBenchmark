@@ -97,11 +97,11 @@ inline std::string benchmark_return_to_string(benchmark_return ret){
 inline kernel_stats calculate_kernel_stats(std::string kernel, std::vector<uint32_t> execs){
 	kernel_stats stats;
 	stats.kernel = kernel;
-	stats.run = count_value(execs, 0.0);
+	stats.run = count_value(execs, 0.01);
 	stats.max = max_val(execs);
 	stats.min = min_val(execs);
-	stats.avg = average(execs, 0.0, std::numeric_limits<double>::max());
-	stats.s_dev = std_deviation(execs, 0.0, std::numeric_limits<double>::max());
+	stats.avg = average(execs, 0.01, std::numeric_limits<double>::max());
+	stats.s_dev = std_deviation(execs, 0.01, std::numeric_limits<double>::max());
 	// outlier management
 	stats.q1 = percentile(execs, 0.25);
 	stats.q3 = percentile(execs, 0.75);
