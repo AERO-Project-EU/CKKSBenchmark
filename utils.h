@@ -11,6 +11,7 @@
 #include <vector>
 #include <random>
 #include <iomanip>
+#include <limits>
 #include "seal/seal.h"
 
 
@@ -74,13 +75,35 @@ inline T min_val(vector<T> vec){
 /*
  * function to calculate the average value of the vector elements >0
  */
+//template <typename T>
+//inline double average(vector<T> vec) {
+//
+//	double acc = 0.0;
+//	int cnt = 0;
+//	for(int i=0;i<vec.size();i++){
+//		if(vec[i]>0){
+//			acc += (double)vec[i];
+//			cnt++;
+//		}
+//	}
+//	return (double)acc/(double)cnt;
+//}
+
+
+/*
+ * function to calculate the average value of the vector elements
+ * greater than low and lower than up bounds
+ */
 template <typename T>
-inline double average(vector<T> vec) {
+inline double average(
+				vector<T> vec,
+				double low = std::numeric_limits<double>::lowest(),
+				double up = std::numeric_limits<double>::max()) {
 
 	double acc = 0.0;
 	int cnt = 0;
 	for(int i=0;i<vec.size();i++){
-		if(vec[i]>0){
+		if((double)vec[i]>low && (double)vec[i]<up){
 			acc += (double)vec[i];
 			cnt++;
 		}
@@ -92,14 +115,37 @@ inline double average(vector<T> vec) {
 /*
  * function to calculate the standard deviation value of the vector elements >0
  */
+//template <typename T>
+//inline double std_deviation(vector<T> vec) {
+//
+//	double s_dev = 0.0;
+//	double avg = average(vec);
+//	int cnt = 0;
+//	for(int i=0; i<vec.size();i++){
+//		if(vec[i]>0){
+//			s_dev += pow(vec[i] - avg, 2);
+//			cnt++;
+//		}
+//	}
+//	return sqrt(s_dev / (double)cnt);
+//}
+
+
+/*
+ * function to calculate the standard deviation value of the vector elements
+ * greater than low and lower that up bounds
+ */
 template <typename T>
-inline double std_deviation(vector<T> vec) {
+inline double std_deviation(
+					vector<T> vec,
+					double low = std::numeric_limits<double>::lowest(),
+					double up = std::numeric_limits<double>::max()) {
 
 	double s_dev = 0.0;
 	double avg = average(vec);
 	int cnt = 0;
 	for(int i=0; i<vec.size();i++){
-		if(vec[i]>0){
+		if((double)vec[i]>low && (double)vec[i]<up){
 			s_dev += pow(vec[i] - avg, 2);
 			cnt++;
 		}
@@ -109,18 +155,36 @@ inline double std_deviation(vector<T> vec) {
 
 
 /*
- * function to count the positive elements within a vector
+ * function to count the elements within a vector
+ * greater than low and lower than up bounds
  */
 template <typename T>
-inline int positive_value(vector<T> vec) {
+inline int count_value(
+				vector<T> vec,
+				double low = std::numeric_limits<double>::lowest(),
+				double up = std::numeric_limits<double>::max()) {
 	int cnt = 0;
 	for(int i=0;i<vec.size();i++){
-		if(vec[i]>0){
+		if(vec[i]>low && vec[i]<up){
 			cnt++;
 		}
 	}
 	return cnt;
 }
+
+
+/*
+ * function to calculate percentile p of a vector
+ */
+template <typename T>
+inline T percentile(vector<T> vec, double p) {
+	// sort vector
+	std::sort(vec.begin(), vec.end());
+	// calculate index
+	uint32_t k = vec.size() * p;
+	return vec[k];
+}
+
 
 
 /*

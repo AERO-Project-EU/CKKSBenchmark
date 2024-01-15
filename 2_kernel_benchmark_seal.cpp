@@ -45,9 +45,9 @@ const double range_limit = 1.0;
 const vector<benchmark_parms> benchmark_settings =
 {
 		{symmetric,sec_level_type::tc128,4096,{40,25,40}},
-//		{symmetric,sec_level_type::tc128,8192,{60,40,40,60}},
-//		{symmetric,sec_level_type::tc128,16384,{60,40,40,40,60}},
-//		{symmetric,sec_level_type::tc128,32768,{60,40,40,40,40,60}},
+		{symmetric,sec_level_type::tc128,8192,{60,40,40,60}},
+		{symmetric,sec_level_type::tc128,16384,{60,40,40,40,60}},
+		{symmetric,sec_level_type::tc128,32768,{60,40,40,40,40,60}},
 
 //		{symmetric,sec_level_type::tc192,4096,{25,20,25}},
 //		{symmetric,sec_level_type::tc192,8192,{55,40,55}},
@@ -60,12 +60,12 @@ const vector<benchmark_parms> benchmark_settings =
 //		{symmetric,sec_level_type::tc256,32768,{60,40,40,40,40,60}},
 
 
-		//{asymmetric,sec_level_type::tc128,4096,{35,25,35}},
-		//{asymmetric,sec_level_type::tc128,8192,{60,40,40,60}}
+//		{asymmetric,sec_level_type::tc128,4096,{35,25,35}},
+//		{asymmetric,sec_level_type::tc128,8192,{60,40,40,60}}
 };
 
 /*
- * This benchmark calculates -(A^2 + BC + 3D + coeff)
+ * This benchmark calculates is derived from SEAL library example/8_performance.cpp
  */
 
 void ckks_kernel_benchmark_seal(){
@@ -753,7 +753,7 @@ void ckks_kernel_benchmark_seal(){
 			strftime(datetime,16,"%Y%m%d-%H%M%S", localtime(&t));
 			string s_datetime = datetime;
 			ofstream stats_file;
-			string fname = "./output/" + s_datetime + "_2_kernel_bench_seal_" +
+			string fname = "./output/" + s_datetime + "_2_seal_" +
 								to_string(curr_bench.enc_mode) + "_" +
 								to_string((int)curr_bench.sec_level) + "_" +
 								to_string(curr_bench.poly_modulus_degree) + "_" +
@@ -801,7 +801,64 @@ void ckks_kernel_benchmark_seal(){
 									curr_bench_stats->stats[6].run << "," << curr_bench_stats->stats[7].run << "," <<
 									curr_bench_stats->stats[8].run << "," << curr_bench_stats->stats[9].run << "," <<
 									curr_bench_stats->stats[10].run << "," << curr_bench_stats->stats[11].run << "," <<
-									curr_bench_stats->stats[12].run << endl << endl;
+									curr_bench_stats->stats[12].run << endl;
+			stats_file << "Q1," << curr_bench_stats->stats[0].q1 << "," << curr_bench_stats->stats[1].q1 << "," <<
+									curr_bench_stats->stats[2].q1 << "," << curr_bench_stats->stats[3].q1 << "," <<
+									curr_bench_stats->stats[4].q1 << "," << curr_bench_stats->stats[5].q1 << "," <<
+									curr_bench_stats->stats[6].q1 << "," << curr_bench_stats->stats[7].q1 << "," <<
+									curr_bench_stats->stats[8].q1 << "," << curr_bench_stats->stats[9].q1 << "," <<
+									curr_bench_stats->stats[10].q1 << "," << curr_bench_stats->stats[11].q1 << "," <<
+									curr_bench_stats->stats[12].q1 << endl;
+			stats_file << "Q3," << curr_bench_stats->stats[0].q3 << "," << curr_bench_stats->stats[1].q3 << "," <<
+									curr_bench_stats->stats[2].q3 << "," << curr_bench_stats->stats[3].q3 << "," <<
+									curr_bench_stats->stats[4].q3 << "," << curr_bench_stats->stats[5].q3 << "," <<
+									curr_bench_stats->stats[6].q3 << "," << curr_bench_stats->stats[7].q3 << "," <<
+									curr_bench_stats->stats[8].q3 << "," << curr_bench_stats->stats[9].q3 << "," <<
+									curr_bench_stats->stats[10].q3 << "," << curr_bench_stats->stats[11].q3 << "," <<
+									curr_bench_stats->stats[12].q3 << endl;
+			stats_file << "IQR," << curr_bench_stats->stats[0].iqr << "," << curr_bench_stats->stats[1].iqr << "," <<
+									curr_bench_stats->stats[2].iqr << "," << curr_bench_stats->stats[3].iqr << "," <<
+									curr_bench_stats->stats[4].iqr << "," << curr_bench_stats->stats[5].iqr << "," <<
+									curr_bench_stats->stats[6].iqr << "," << curr_bench_stats->stats[7].iqr << "," <<
+									curr_bench_stats->stats[8].iqr << "," << curr_bench_stats->stats[9].iqr << "," <<
+									curr_bench_stats->stats[10].iqr << "," << curr_bench_stats->stats[11].iqr << "," <<
+									curr_bench_stats->stats[12].iqr << endl;
+			stats_file << "Lower," << curr_bench_stats->stats[0].lower << "," << curr_bench_stats->stats[1].lower << "," <<
+									curr_bench_stats->stats[2].lower << "," << curr_bench_stats->stats[3].lower << "," <<
+									curr_bench_stats->stats[4].lower << "," << curr_bench_stats->stats[5].lower << "," <<
+									curr_bench_stats->stats[6].lower << "," << curr_bench_stats->stats[7].lower << "," <<
+									curr_bench_stats->stats[8].lower << "," << curr_bench_stats->stats[9].lower << "," <<
+									curr_bench_stats->stats[10].lower << "," << curr_bench_stats->stats[11].lower << "," <<
+									curr_bench_stats->stats[12].lower << endl;
+			stats_file << "Upper," << curr_bench_stats->stats[0].upper << "," << curr_bench_stats->stats[1].upper << "," <<
+									curr_bench_stats->stats[2].upper << "," << curr_bench_stats->stats[3].upper << "," <<
+									curr_bench_stats->stats[4].upper << "," << curr_bench_stats->stats[5].upper << "," <<
+									curr_bench_stats->stats[6].upper << "," << curr_bench_stats->stats[7].upper << "," <<
+									curr_bench_stats->stats[8].upper << "," << curr_bench_stats->stats[9].upper << "," <<
+									curr_bench_stats->stats[10].upper << "," << curr_bench_stats->stats[11].upper << "," <<
+									curr_bench_stats->stats[12].upper << endl;
+			stats_file << "Outlier," << curr_bench_stats->stats[0].cnt_o << "," << curr_bench_stats->stats[1].cnt_o << "," <<
+									curr_bench_stats->stats[2].cnt_o << "," << curr_bench_stats->stats[3].cnt_o << "," <<
+									curr_bench_stats->stats[4].cnt_o << "," << curr_bench_stats->stats[5].cnt_o << "," <<
+									curr_bench_stats->stats[6].cnt_o << "," << curr_bench_stats->stats[7].cnt_o << "," <<
+									curr_bench_stats->stats[8].cnt_o << "," << curr_bench_stats->stats[9].cnt_o << "," <<
+									curr_bench_stats->stats[10].cnt_o << "," << curr_bench_stats->stats[11].cnt_o << "," <<
+									curr_bench_stats->stats[12].cnt_o << endl;
+			stats_file << "Outlier %," << curr_bench_stats->stats[0].perc_o << "," << curr_bench_stats->stats[1].perc_o << "," <<
+									curr_bench_stats->stats[2].perc_o << "," << curr_bench_stats->stats[3].perc_o << "," <<
+									curr_bench_stats->stats[4].perc_o << "," << curr_bench_stats->stats[5].perc_o << "," <<
+									curr_bench_stats->stats[6].perc_o << "," << curr_bench_stats->stats[7].perc_o << "," <<
+									curr_bench_stats->stats[8].perc_o << "," << curr_bench_stats->stats[9].perc_o << "," <<
+									curr_bench_stats->stats[10].perc_o << "," << curr_bench_stats->stats[11].perc_o << "," <<
+									curr_bench_stats->stats[12].perc_o << endl;
+			stats_file << "Avg_o," << curr_bench_stats->stats[0].avg_o << "," << curr_bench_stats->stats[1].avg_o << "," <<
+									curr_bench_stats->stats[2].avg_o << "," << curr_bench_stats->stats[3].avg_o << "," <<
+									curr_bench_stats->stats[4].avg_o << "," << curr_bench_stats->stats[5].avg_o << "," <<
+									curr_bench_stats->stats[6].avg_o << "," << curr_bench_stats->stats[7].avg_o << "," <<
+									curr_bench_stats->stats[8].avg_o << "," << curr_bench_stats->stats[9].avg_o << "," <<
+									curr_bench_stats->stats[10].avg_o << "," << curr_bench_stats->stats[11].avg_o << "," <<
+									curr_bench_stats->stats[12].avg_o << endl << endl;
+
 			// run details
 			for(int i=0;i<run;i++){
 				stats_file << ",";

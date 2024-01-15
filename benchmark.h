@@ -49,10 +49,19 @@ typedef struct {
 typedef struct {
 	std::string kernel;
 	uint32_t run;
-	uint32_t max;
-	uint32_t min;
+	double max;
+	double min;
 	double avg;
 	double s_dev;
+	double q1;
+	double q3;
+	double iqr;
+	double lower;
+	double upper;
+	double avg_o; // average without outlier
+	double s_dev_o; // standard deviation without outlier
+	uint32_t cnt_o; // outlier count
+	double perc_o; // outlier percentage
 } kernel_stats;
 
 
@@ -88,11 +97,21 @@ inline std::string benchmark_return_to_string(benchmark_return ret){
 inline kernel_stats calculate_kernel_stats(std::string kernel, std::vector<uint32_t> execs){
 	kernel_stats stats;
 	stats.kernel = kernel;
-	stats.run = positive_value(execs);
+	stats.run = count_value(execs, 0.0);
 	stats.max = max_val(execs);
 	stats.min = min_val(execs);
-	stats.avg = average(execs);
-	stats.s_dev = std_deviation(execs);
+	stats.avg = average(execs, 0.0, std::numeric_limits<double>::max());
+	stats.s_dev = std_deviation(execs, 0.0, std::numeric_limits<double>::max());
+	// outlier management
+	stats.q1 = percentile(execs, 0.25);
+	stats.q3 = percentile(execs, 0.75);
+	stats.iqr = stats.q3 - stats.q1;
+	stats.lower = stats.q1 - (1.5*stats.iqr);
+	stats.upper = stats.q3 + (1.5*stats.iqr);
+	stats.avg_o = average(execs, stats.lower, stats.upper);
+	stats.s_dev_o = std_deviation(execs, stats.lower, stats.upper);
+	stats.cnt_o = execs.size() - count_value(execs, stats.lower, stats.upper);
+	stats.perc_o = 100.0 * (double)stats.cnt_o / (double)stats.run;
 	return stats;
 };
 
@@ -103,7 +122,11 @@ inline std::string kernel_stats_to_string(kernel_stats stats){
 			std::to_string(stats.s_dev) + "\t" +
 			std::to_string(stats.max) + "\t" +
 			std::to_string(stats.min) + "\t" +
-			std::to_string(stats.run);
+			std::to_string(stats.run) + "\t" +
+			std::to_string(stats.avg_o) + "\t" +
+			std::to_string(stats.s_dev_o) + "\t" +
+			std::to_string(stats.cnt_o) + "\t" +
+			std::to_string(stats.perc_o) + "%";
 }
 
 
