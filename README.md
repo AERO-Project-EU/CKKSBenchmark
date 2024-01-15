@@ -1,4 +1,4 @@
-INSTALLING SEAL library locally (from SEAL-main folder)
+uild buildINSTALLING SEAL library locally (from SEAL-main folder)
 
 cmake -S . -B build -DCMAKE_INSTALL_PREFIX=<path/to/local/install>
 
@@ -17,7 +17,7 @@ cmake --install build
 
 COMPILING and running CKKSBenchmark with local SEAL library (from CKKSBenchmark-main folder)
 
-cmake -S . -B build build -DSEAL_ROOT=<path/to/local/install>
+cmake -S . -B build -DSEAL_ROOT=<path/to/local/install>
 
 cmake --build build
 
