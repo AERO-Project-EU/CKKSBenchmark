@@ -7,6 +7,7 @@
 
 #include "benchmark.h"
 #include "utils.h"
+#include "clk_utils.h"
 
 using namespace std;
 using namespace seal;
@@ -86,6 +87,15 @@ void ckks_kernel_benchmark_seal(){
 
 	// set the scheme for all benchmarks
 	EncryptionParameters parms(scheme_type::ckks);
+
+	// open file to read cycles if metrics is clock
+	#if(BENCH_UNIT == 1)
+	int clk_fd = clk_measure_init();
+	if(clk_fd == -1){
+		cout << "ERROR: impossible to collect clock cycles counter" << endl;
+		exit(EXIT_FAILURE);
+	}
+	#endif
 
 	/*
 	 * loop on benchmark settings to execute each of them
@@ -184,7 +194,7 @@ void ckks_kernel_benchmark_seal(){
 
 		chrono::high_resolution_clock::time_point time_start, time_end;
 		chrono::microseconds time_diff;
-		clock_t clk_begin, clk_end;
+		long long clk_begin, clk_end;
 
 		/*
 		 * loop to execute the current benchmark setting run times
@@ -216,7 +226,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -226,7 +236,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				encode_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				encode_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -243,7 +253,7 @@ void ckks_kernel_benchmark_seal(){
 					#if(BENCH_UNIT == 0)
 					time_start = chrono::high_resolution_clock::now();
 					#else
-					clk_begin = clock();
+					clk_begin = clk_read_start(clk_fd);
 					#endif
 
 					// benchmark target
@@ -253,7 +263,7 @@ void ckks_kernel_benchmark_seal(){
 					time_end = chrono::high_resolution_clock::now();
 					encrypt_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 					#else
-					clk_end = clock();
+					clk_end = clk_read_end(clk_fd);
 					encrypt_series[run_index] = (clk_end-clk_begin);
 					#endif
 
@@ -262,7 +272,7 @@ void ckks_kernel_benchmark_seal(){
 					#if(BENCH_UNIT == 0)
 					time_start = chrono::high_resolution_clock::now();
 					#else
-					clk_begin = clock();
+					clk_begin = clk_read_start(clk_fd);
 					#endif
 
 					// benchmark target
@@ -272,7 +282,7 @@ void ckks_kernel_benchmark_seal(){
 					time_end = chrono::high_resolution_clock::now();
 					encrypt_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 					#else
-					clk_end = clock();
+					clk_end = clk_read_end(clk_fd);
 					encrypt_series[run_index] = (clk_end-clk_begin);
 					#endif
 
@@ -300,7 +310,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -310,7 +320,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				add_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				add_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -341,7 +351,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -351,7 +361,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				mul_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				mul_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -382,7 +392,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -392,7 +402,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				relin_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				relin_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -413,7 +423,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -423,7 +433,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				rescale_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				rescale_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -444,7 +454,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -454,7 +464,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				rotate_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				rotate_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -485,7 +495,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -495,7 +505,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				negate_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				negate_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -525,7 +535,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -535,7 +545,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				mul_plain_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				mul_plain_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -565,7 +575,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -575,7 +585,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				square_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				square_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -602,7 +612,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -612,7 +622,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				decrypt_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				decrypt_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -635,7 +645,7 @@ void ckks_kernel_benchmark_seal(){
 				#if(BENCH_UNIT == 0)
 				time_start = chrono::high_resolution_clock::now();
 				#else
-				clk_begin = clock();
+				clk_begin = clk_read_start(clk_fd);
 				#endif
 
 				// benchmark target
@@ -645,7 +655,7 @@ void ckks_kernel_benchmark_seal(){
 				time_end = chrono::high_resolution_clock::now();
 				decode_series[run_index] = (chrono::duration_cast<chrono::microseconds>(time_end - time_start).count());
 				#else
-				clk_end = clock();
+				clk_end = clk_read_end(clk_fd);
 				decode_series[run_index] = (clk_end-clk_begin);
 				#endif
 
@@ -884,6 +894,10 @@ void ckks_kernel_benchmark_seal(){
 
 	} // end of loop on benchmark settings
 
+	// close file to read cycles if metrics is clock
+	#if(BENCH_UNIT == 1)
+	clk_measure_finish(clk_fd);
+	#endif
 
 	cout << endl;
 	cout << "**********************************" << endl;
