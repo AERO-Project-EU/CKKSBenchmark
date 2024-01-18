@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sys/utsname.h>
 #include "config.h"
 #include "utils.h"
 #include "test.h"
@@ -21,11 +22,16 @@ using namespace seal;
  */
 
 int main(int argc, char **argv) {
+
+	struct utsname osInfo{};
+	uname(&osInfo);
+
 	cout << "+----------------------------------------+" << endl;
 	cout << "| Benchmark Microsoft SEAL CKKS scheme   |" << endl;
 	cout << "+----------------------------------------+" << endl;
 	cout << "Library version " << SEAL_VERSION << endl;
 	cout << "Benchmark version " << CKKSBenchmark_VERSION_MAJOR << "." << CKKSBenchmark_VERSION_MINOR << endl;
+	cout << "Architecture " << osInfo.machine << endl;
 	cout << endl;
 
 	while (true) {
