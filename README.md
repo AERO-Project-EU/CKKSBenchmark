@@ -58,7 +58,8 @@ The use of Microsoft HE Acceleration Library can be enabled at building time wit
 ```
 cmake -S . -B build -DSEAL_USE_INTEL_HEXL=on
 ```
-
+> [!NOTE]
+> This option is only available on Intel CPUs with AVX-512 feature set. [More information](https://github.com/intel/hexl/blob/development/README.md)
 
 ## Configuration, building and running
 
