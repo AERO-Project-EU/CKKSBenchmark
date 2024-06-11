@@ -62,7 +62,7 @@ cmake -S . -B build -DSEAL_USE_INTEL_HEXL=on
 
 ## Configuration, building and running
 
-### Configuation
+### Configuration
 
 CKKSBenchmark has some configuration parameters, which can be modified in the file `1_kernel_benchmak_expr.cpp`
 
